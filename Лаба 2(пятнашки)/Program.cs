@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Лаба_2_пятнашки_
 {
@@ -11,7 +12,20 @@ namespace Лаба_2_пятнашки_
         static void Main(string[] args)
         {
             Random Gen = new Random();
-            Game player = new Game(3);
+            Console.WriteLine("Welcome to my first game :)");
+            Console.Write("Type your size of field (add one number) ");
+            int a = Convert.ToInt32(Console.ReadLine());
+            Game player = new Game(a); //new Game(Convert.ToInt32(Console.ReadLine()));
+            Console.Clear();
+            while (player.CheckWrongSize(a))
+            {
+                Console.WriteLine("Wrong size");
+                Console.Write("Type your size of field (add one number) ");
+                a = Convert.ToInt32(Console.ReadLine());
+                player = new Game(a);
+                Console.Clear();
+            }
+            Console.Clear();
             player.Filling(Gen);
             while (!player.CheckingSequence())
             {

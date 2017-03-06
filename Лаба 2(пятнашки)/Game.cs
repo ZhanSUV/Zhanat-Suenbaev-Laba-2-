@@ -13,6 +13,17 @@ namespace Лаба_2_пятнашки_
         {
             this.field = new int[size, size];
         }
+        public bool CheckWrongSize(int value)
+        {
+            if (value >= 3)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         private int[] GetLocation(int value)
         {
             int[] adress = new int[2];
@@ -97,46 +108,47 @@ namespace Лаба_2_пятнашки_
                     numbers[i] = i + 1;
                 }             
             }
-            int measure = 1;
-            for (int i = 0; i < field.GetLength(0); i++)
-            {
-                for (int j = 0; j < field.GetLength(1); j++)
-                {
-                    if (measure != field.Length)
-                    {
-                        field[i, j] = measure;
-                        measure++;
-                    }
-                    else
-                    {
-                        field[i, j] = 0;
-                    }
-                }
-            }
+            //int measure = 1;
             //for (int i = 0; i < field.GetLength(0); i++)
             //{
             //    for (int j = 0; j < field.GetLength(1); j++)
             //    {
-            //        int index = Gen.Next(0, field.Length);
-            //        for (int k = 0; k < numbers.Length; k++)
+            //        if (measure != field.Length)
             //        {
-            //            while (numbers[index] == numbers[k] && numbers[k] == -1)
-            //            {
-            //                index = Gen.Next(0, field.Length);
-            //            }
+            //            field[i, j] = measure;
+            //            measure++;
             //        }
-            //        field[i, j] = numbers[index];
-            //        numbers[index] = -1;
+            //        else
+            //        {
+            //            field[i, j] = 0;
+            //        }
             //    }
             //}
+            for (int i = 0; i < field.GetLength(0); i++)
+            {
+                for (int j = 0; j < field.GetLength(1); j++)
+                {
+                    int index = Gen.Next(0, field.Length);
+                    for (int k = 0; k < numbers.Length; k++)
+                    {
+                        while (numbers[index] == numbers[k] && numbers[k] == -1)
+                        {
+                            index = Gen.Next(0, field.Length);
+                        }
+                    }
+                    field[i, j] = numbers[index];
+                    numbers[index] = -1;
+                }
+            }
         }
         public void Printing()
         {
             for (int i = 0; i < field.GetLength(0); i++)
             {
+                Console.Write("\t");
                 for (int j = 0; j < field.GetLength(1); j++)
                 {
-                    Console.Write(field[i, j] + " ");
+                    Console.Write(field[i, j] + "\t");
                 }
                 Console.WriteLine();
             }
