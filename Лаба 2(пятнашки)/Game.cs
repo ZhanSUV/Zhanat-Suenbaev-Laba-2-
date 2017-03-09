@@ -12,17 +12,15 @@ namespace Лаба_2_пятнашки_
         public Game(int size)
         {
             this.field = new int[size, size];
+            Random Gen = new Random();
+            Filling(Gen);
         }
-        public bool CheckWrongSize(int value)
+        public Game(string path)
         {
-            if (value >= 3)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            int[] numbers = FileReader.ReadingFile(path);
+            int size = (int)Math.Sqrt(numbers.Length);
+            this.field = new int[size, size];
+            FillingFromSymbolsFromFile(path);
         }
         private int[] GetLocation(int value)
         {
@@ -40,7 +38,7 @@ namespace Лаба_2_пятнашки_
             }
             return adress;
         }
-        public void Shift(int value)
+        private bool Shift(int value)
         {
             int[] adressOfValue = GetLocation(value);
             int[] adressOfZero = GetLocation(0);
@@ -48,57 +46,44 @@ namespace Лаба_2_пятнашки_
             int y = adressOfValue[1];
             int x1 = adressOfZero[0];
             int y1 = adressOfZero[1];
-            if ((y == y1 + 1 && x == x1) || (y == y1 - 1 && x == x1) || (y == y1 && x == x1 - 1)) // находится слева посередине(соседствуют 3 нуля)
+            if (Math.Sqrt(Math.Pow((x - x1), 2) + Math.Pow((y - y1), 2)) == 1) 
             {
-                field[y1, x1] = field[y, x];
-                field[y, x] = 0;
+                return true;
             }
-            else if ((y == y1 + 1 && x == x1) || (y == y1 && x == x1 + 1) || (y == y1 - 1 && x == x1)) //находится справа посередине(соседствуют 3 нуля)
-            {
-                field[y1, x1] = field[y, x];
-                field[y, x] = 0;
-            }
-            else if ((y == y1 && x == x1 + 1) || (y == y1 && x == x1 - 1) || (y == y1 + 1 && x == x1) || (y == y1 - 1 && x == x1)) // находится посередине(соседствуют 4 нуля)
-            {
-                field[y1, x1] = field[y, x];
-                field[y, x] = 0;
-            }
-            else if ((y == y1 && x == x1 + 1) || (x == x1 && y == y1 - 1) || (y == y1 && x == x1 - 1)) //находится сверху посередине(соседствуют 3 нуля)
-            {
-                field[y1, x1] = field[y, x];
-                field[y, x] = 0;
-            }
-            else if ((y == y1 && x == x1 + 1) || (x == x1 && y == y1 + 1) || (y == y1 && x == x1 - 1)) //находится снизу посередине(соседствуют 3 нуля)
-            {
-                field[y1, x1] = field[y, x];
-                field[y, x] = 0;
-            }
-            else if ((y == y1 && x == x1 - 1) || (y == y1 - 1 && x == x1)) // находится в левем верхнем углу(соседствуют 2 нуля)
-            {
-                field[y1, x1] = field[y, x];
-                field[y, x] = 0;
-            }
-            else if ((y == y1 && x == x1 - 1) || (y == y1 + 1 && x == x1)) // находится в левем нижнем углу(соседствуют 2 нуля)
-            {
-                field[y1, x1] = field[y, x];
-                field[y, x] = 0;
-            }
-            else if ((y == y1 && x == x1 + 1) || (y == y1 + 1 && x == x1)) // находится в правом верхнем углу(соседствуют 2 нуля) + на - поставил
-            {
-                field[y1, x1] = field[y, x];
-                field[y, x] = 0;
-            }
-            else if ((y == y1 && x == x1 + 1) || (y == y1 + 1 && x == x1)) // находится в правом нижнем углу(соседствуют 2 нуля)
-            {
-                field[y1, x1] = field[y, x];
-                field[y, x] = 0;
-            }
-            else
-            {
-                Console.WriteLine("Your value is wrong");
-            }
+            return false;
         }
-        public void Filling(Random Gen)
+        private void ChangeKnuckles()
+        {
+            while (!CheckingSequence())
+            {
+                Print.Field(field);
+                Print.AskNumber();
+                int value = Convert.ToInt32(Print.ReadUserAnswer());
+                if (Shift(value))
+                {
+                    int[] adressOfValue = GetLocation(value);
+                    int[] adressOfZero = GetLocation(0);
+                    int x = adressOfValue[0];
+                    int y = adressOfValue[1];
+                    int x1 = adressOfZero[0];
+                    int y1 = adressOfZero[1];
+                    field[y1, x1] = field[y, x];
+                    field[y, x] = 0;
+                }
+                Print.ClearingConsole();
+            }
+            Print.Win();
+            Print.AskNewGame();
+            string answer = Print.ReadUserAnswer();
+            while (answer.ToLower() == "yes")
+            {
+                Print.AskSize();
+                Print.ClearingConsole();
+                Game newgame = new Game(Convert.ToInt32(Print.ReadUserAnswer()));
+            }
+            Print.End();       
+        }
+        private void Filling(Random Gen)
         {       
             int[] numbers = new int[field.Length];
             for (int i = 0; i < numbers.GetLength(0); i++)
@@ -108,22 +93,6 @@ namespace Лаба_2_пятнашки_
                     numbers[i] = i + 1;
                 }             
             }
-            //int measure = 1;
-            //for (int i = 0; i < field.GetLength(0); i++)
-            //{
-            //    for (int j = 0; j < field.GetLength(1); j++)
-            //    {
-            //        if (measure != field.Length)
-            //        {
-            //            field[i, j] = measure;
-            //            measure++;
-            //        }
-            //        else
-            //        {
-            //            field[i, j] = 0;
-            //        }
-            //    }
-            //}
             for (int i = 0; i < field.GetLength(0); i++)
             {
                 for (int j = 0; j < field.GetLength(1); j++)
@@ -140,20 +109,23 @@ namespace Лаба_2_пятнашки_
                     numbers[index] = -1;
                 }
             }
+            ChangeKnuckles();
         }
-        public void Printing()
+        private void FillingFromSymbolsFromFile(string path)
         {
+            int[] numbers = FileReader.ReadingFile(path);
+            int count = 0;
             for (int i = 0; i < field.GetLength(0); i++)
             {
-                Console.Write("\t");
                 for (int j = 0; j < field.GetLength(1); j++)
                 {
-                    Console.Write(field[i, j] + "\t");
+                    field[i, j] = numbers[count];
+                    count++;
                 }
-                Console.WriteLine();
             }
+            ChangeKnuckles();
         }
-        public bool CheckingSequence()
+        private bool CheckingSequence()
         {
             int[] numbers = new int[field.Length];
             for (int i = 0; i < numbers.Length; i++)
