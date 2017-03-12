@@ -36,15 +36,12 @@ namespace Лаба_2_пятнашки_
         }
         private static bool CheckNumbersFromFile(string[] lineOfMeasures)
         {
-            string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            alphabet = alphabet.ToLower();
-            char[] letters = alphabet.ToCharArray();
             for (int i = 0; i < lineOfMeasures.Length; i++)
             {
-                for (int j = 0; j < letters.Length; j++)
+                char[] symbols = lineOfMeasures[i].ToCharArray();
+                for (int j = 0; j < symbols.Length; j++)
                 {
-                    lineOfMeasures[i] = lineOfMeasures[i].ToLower();
-                    if (lineOfMeasures[i].Contains(letters[j]))
+                    if (!char.IsDigit(symbols[j]))
                     {
                         return false;
                     }
