@@ -54,6 +54,7 @@ namespace Лаба_2_пятнашки_
         }
         private void ChangeKnuckles()
         {
+            Print.ClearingConsole();
             while (!CheckingSequence())
             {
                 Print.Field(field);
@@ -78,7 +79,6 @@ namespace Лаба_2_пятнашки_
             while (answer.ToLower() == "yes")
             {
                 Print.AskSize();
-                Print.ClearingConsole();
                 Game newgame = new Game(Convert.ToInt32(Print.ReadUserAnswer()));
             }
             Print.End();       
