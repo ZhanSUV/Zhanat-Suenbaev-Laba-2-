@@ -11,7 +11,7 @@ namespace Лаба_2_пятнашки_
     {
         static void Main(string[] args)
         {
-            //player = new Game("C:\\Значения для полей.txt");
+            //Game player = new Game("C:\\Значения для полей.txt");
             //Game player = new Game(3);
         }
     }

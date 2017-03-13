@@ -17,7 +17,7 @@ namespace Лаба_2_пятнашки_
         }
         public Game(string path)
         {
-            int[] numbers = FileReader.ReadingFile(path);
+            int[] numbers = FileReaderForKnuckles.ReadingFile(path);
             int size = (int)Math.Sqrt(numbers.Length);
             this.field = new int[size, size];
             FillingFromSymbolsFromFile(path);
@@ -37,6 +37,18 @@ namespace Лаба_2_пятнашки_
                 }
             }
             return adress;
+        }
+        public int this[int index]
+        {
+            set
+            {
+                field[index, index] = value;
+            }
+
+            get
+            {
+                return field[index, index];
+            }
         }
         private bool Shift(int value)
         {
@@ -113,7 +125,7 @@ namespace Лаба_2_пятнашки_
         }
         private void FillingFromSymbolsFromFile(string path)
         {
-            int[] numbers = FileReader.ReadingFile(path);
+            int[] numbers = FileReaderForKnuckles.ReadingFile(path);
             int count = 0;
             for (int i = 0; i < field.GetLength(0); i++)
             {

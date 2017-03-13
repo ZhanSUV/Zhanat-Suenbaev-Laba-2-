@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Лаба_2_пятнашки_
 {
-    class FileReader
+    class FileReaderForKnuckles
     {
         public static int[] ReadingFile(string path)
         {  
